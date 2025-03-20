@@ -1,7 +1,23 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import "../styles/Login.css"; // Import CSS file
+import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
+  const[email, setEmail] = useState("");
+  const[password, setPassword] = useState("");
+  const[error, setError] = useState(null);
+  const { login } = useAuth();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await login(email, password);
+    } catch (error) {
+      setError("Invalid email or password");
+    }
+  };
+
+   
   return (
     <div className="login-container">
       {/* Left Section: Login Form */}
@@ -10,13 +26,15 @@ const Login = () => {
         <h2>Welcome back !</h2>
         <p>Enter to get unlimited access to data & information.</p>
 
-        <form>
-          <label>Email *</label>
-          <input type="email" placeholder="Enter your mail address" required />
+        {error && <p className="error-message">{error}</p>}
 
-          <label>Password *</label>
+        <form onSubmit={handleSubmit}>
+          <label for="email">Email *</label>
+          <input type="email" placeholder="Enter your mail address" id="email" required />
+
+          <label for="password">Password *</label>
           <div className="password-field">
-            <input type="password" placeholder="Enter password" required />
+            <input type="password" placeholder="Enter password" id="password" required />
             <span className="eye-icon">👁️</span>
           </div>
 
