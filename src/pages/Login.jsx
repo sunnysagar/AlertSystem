@@ -1,4 +1,7 @@
 import React from "react";
+import loginImage from "../assets/login_img.jpg";
+import companyLogo from "../assets/company_logo.png"; // Import Company Logo
+import google_logo from "../assets/google_logo.png";
 import { FaGoogle } from "react-icons/fa"; // Import Google Icon
 import "../styles/Login.css"; // Import CSS file
 
@@ -8,7 +11,7 @@ const Login = () => {
       { /* Left Section: Login Form  */}
         <div className="login-form">
           <div className="logo">
-            <img src="C:\Users\pranj\Desktop\Alert Generator - Photos\CI.png" alt="Company Logo" />
+            <img src={companyLogo} alt="Company Logo" />
           </div>
           <h2>Welcome back !</h2>
           <p>Enter to get unlimited access to data & information.</p>
@@ -33,10 +36,10 @@ const Login = () => {
             <button className="login-btn">Log In</button>
           </form>
 
-          <div className="or-divider">Or, Login with</div>
+          <div className="or-divider">Or Login with</div>
 
           <button className="google-btn">
-          <FaGoogle className="google-icon" /> Sign up with Google
+          <img src={google_logo} alt="Google Logo" /> Sign in with Google
           </button>
 
           <p className="register-link">
@@ -46,7 +49,7 @@ const Login = () => {
 
         {/* Right Section: Decorative Panel */}
       <div className="login-decor">
-        {/* This div will be used for background design */}
+      <img src={loginImage} alt="Login Illustration" className="login-image" />
       </div>
     </div>
   );
