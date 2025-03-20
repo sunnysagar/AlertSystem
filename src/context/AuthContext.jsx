@@ -1,10 +1,14 @@
 import axios from "axios";
-import React, { createContext, useEffect, useMemo, useState } from "react";
+import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
 
-const AuthProvider = ({ children }) => {
+export const useAuth = () => {
+    return useContext(AuthContext);
+}
+
+export const AuthProvider = ({ children }) => {
     
     const[token, setToken] = useState(null);
     const[isAuthenticated, setIsAuthenticated] = useState(false);
@@ -27,6 +31,7 @@ const AuthProvider = ({ children }) => {
             setToken(response.data.access_token);
             setIsAuthenticated(true);
             localStorage.setItem("access_token", response.data.access_token);
+            alert("Login successful");
             navigate("/");
         } catch(error){
             // alert("Login failed", error);

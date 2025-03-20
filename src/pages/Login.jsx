@@ -3,30 +3,59 @@ import loginImage from "../assets/login_img.jpg";
 import companyLogo from "../assets/company_logo.png"; // Import Company Logo
 import google_logo from "../assets/google_logo.png";
 import { FaGoogle } from "react-icons/fa"; // Import Google Icon
+import React, { useState } from "react";
 import "../styles/Login.css"; // Import CSS file
+import { useAuth } from "../context/AuthContext";
+import companyLogo from "../assets/company-logo.png";
 
 const Login = () => {
+  const[email, setEmail] = useState("");
+  const[password, setPassword] = useState("");
+  const[error, setError] = useState(null);
+  const { login } = useAuth();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await login(email, password);
+    } catch (error) {
+      setError("Invalid email or password");
+    }
+  };
+
+   
   return (
     <div className="login-container">
       { /* Left Section: Login Form  */}
         <div className="login-form">
           <div className="logo">
-            <img src={companyLogo} alt="Company Logo" />
+            <img src="C:\Users\pranj\Desktop\Alert Generator - Photos\CI.png" alt="Company Logo" />
           </div>
-          <h2>Welcome back !</h2>
-          <p>Enter to get unlimited access to data & information.</p>
+        <h2>Welcome back !</h2>
+        <p>Enter to get unlimited access to data & information.</p>
 
-          <form>
-            <label>Email *</label>
-            <input type="email" placeholder="Enter your e-mail " required />
+        {error && <p className="error-message">{error}</p>}
 
-            <label>Password *</label>
-            <div className="password-field">
-          <input type="password" placeholder="Enter password" required />
-          <span className="eye-icon">👁️</span>
-            </div>
+        <form onSubmit={handleSubmit}>
+          <label for="email">Email *</label>
+          <input type="email" 
+                  placeholder="Enter your mail address" 
+                  id="email"
+                  required
+                  onChange={(e) => setEmail(e.target.value)} />
 
-            <div className="remember-forgot">
+          <label for="password">Password *</label>
+          <div className="password-field">
+            <input 
+                  type="password" 
+                  placeholder="Enter password" 
+                  id="password"
+                  required
+                  onChange={(e) => setPassword(e.target.value)} />
+            <span className="eye-icon">👁️</span>
+          </div>
+
+           <div className="remember-forgot">
           <label>
             <input type="checkbox" /> Remember me
           </label>
