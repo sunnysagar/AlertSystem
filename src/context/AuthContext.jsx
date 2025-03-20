@@ -12,7 +12,7 @@ export const AuthProvider = ({ children }) => {
     
     const[token, setToken] = useState(null);
     const[isAuthenticated, setIsAuthenticated] = useState(false);
-    const navigate = useNavigate;
+    const navigate = useNavigate();
 
     useEffect(() => {
         const authToken = localStorage.getItem("access_token");

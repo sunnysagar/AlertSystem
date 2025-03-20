@@ -1,7 +1,7 @@
 
 /**
- * @file Login.jsx
- * @description This file contains the Login component for the CTEL Web App. 
+ * Login.jsx
+ * This file contains the Login component for the CTEL Web App. 
  * The component renders a login form with email and password fields, 
  * a "Remember me" checkbox, and options to log in with Google or register a new account.
  * It also includes error handling for invalid login attempts.
