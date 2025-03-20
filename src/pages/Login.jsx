@@ -1,7 +1,7 @@
-import React, {useState } from "react";
-import { FaGoogle } from "react-icons/fa"; // Import Google Icon
+import React, { useState } from "react";
 import "../styles/Login.css"; // Import CSS file
 import { useAuth } from "../context/AuthContext";
+import companyLogo from "../assets/company-logo.png";
 
 const Login = () => {
   const[email, setEmail] = useState("");
@@ -23,7 +23,9 @@ const Login = () => {
     <div className="login-container">
       {/* Left Section: Login Form */}
       <div className="login-form">
-        <div className="logo">🔷</div>
+        <div className="logo">
+            <img src={companyLogo} alt="Company Logo" />
+          </div>
         <h2>Welcome back !</h2>
         <p>Enter to get unlimited access to data & information.</p>
 
