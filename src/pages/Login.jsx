@@ -1,8 +1,18 @@
+
+/**
+ * @file Login.jsx
+ * @description This file contains the Login component for the CTEL Web App. 
+ * The component renders a login form with email and password fields, 
+ * a "Remember me" checkbox, and options to log in with Google or register a new account.
+ * It also includes error handling for invalid login attempts.
+ * 
+ */
+
 import React, { useState } from "react";
 import loginImage from "../assets/login_img.jpg";
-import companyLogo from "../assets/company_logo.png"; // Import Company Logo
+import companyLogo from "../assets/company_logo.png";
 import google_logo from "../assets/google_logo.png";
-import "../styles/Login.css"; // Import CSS file
+import "../styles/Login.css"; // Import CSS file for login page
 import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
@@ -28,8 +38,8 @@ const Login = () => {
           <div className="logo">
             <img src={companyLogo} alt="Company Logo" />
           </div>
-        <h2>Welcome back !</h2>
-        <p>Enter to get unlimited access to data & information.</p>
+        <h2>Corossion Intel</h2>
+        <p>Pre-Failure Alarm Generation System.</p>
 
         {error && <p className="error-message">{error}</p>}
 

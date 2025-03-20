@@ -19,7 +19,7 @@
 }
 
 .logo img{
-  width: 250px;
+  width: 120px;
   margin-right: 10px;
 }
 
@@ -133,11 +133,12 @@ input {
   flex: 1;
    /* A stylish purple shade */
   display: flex;
-  justify-content: center;
-  align-items: center;
+  /* justify-content: center;
+  align-items: center; */
+  /* border: #777 solid 1px; */
 }
 
 .login-image {
   width: 100%;
-  max-width: 500px;
+  /* max-width: 500px; */
 }
