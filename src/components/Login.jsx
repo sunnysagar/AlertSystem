@@ -1,52 +1,53 @@
-import { useState } from "react";
-import "../styles/Login.css";
+import React from "react";
+import "../styles/Login.css"; // Import CSS file
 
-const LoginPage = () => {
-  const [userData, setUserData] = useState({ username: "", password: "" });
-
-  const handleChange = (e) => {
-    setUserData({ ...userData, [e.target.name]: e.target.value });
-  };
-
-  const handleLogin = () => {
-    console.log("Logging in with:", userData);
-    // Add authentication logic here
-  };
-
+const Login = () => {
   return (
     <div className="login-container">
-      <div className="login-box">
-        <h2>Login</h2>
+      {/* Left Section: Login Form */}
+      <div className="login-form">
+        <div className="logo">🔷</div>
+        <h2>Welcome back !</h2>
+        <p>Enter to get unlimited access to data & information.</p>
 
-        <input
-          type="text"
-          name="username"
-          placeholder="Email"
-          value={userData.username}
-          onChange={handleChange}
-          className="input-field"
-        />
+        <form>
+          <label>Email *</label>
+          <input type="email" placeholder="Enter your mail address" required />
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          value={userData.password}
-          onChange={handleChange}
-          className="input-field"
-        />
+          <label>Password *</label>
+          <div className="password-field">
+            <input type="password" placeholder="Enter password" required />
+            <span className="eye-icon">👁️</span>
+          </div>
 
-        <button onClick={handleLogin} className="login-button">
-          Login
+          <div className="remember-forgot">
+            <label>
+              <input type="checkbox" /> Remember me
+            </label>
+            <a href="#">Forgot your password?</a>
+          </div>
+
+          <button className="login-btn">Log In</button>
+        </form>
+
+        <div className="or-divider">Or, Login with</div>
+
+        <button className="google-btn">
+          <img src="https://img.icons8.com/color/48/000000/google-logo.png" alt="Google" />
+          Sign up with Google
         </button>
 
-        <div className="login-links">
-          <a href="#">Forgot Password?</a>
-          <a href="/signup">Sign Up</a>
-        </div>
+        <p className="register-link">
+          Don't have an account? <a href="#">Register here</a>
+        </p>
+      </div>
+
+      {/* Right Section: Decorative Panel */}
+      <div className="login-decor">
+        {/* This div will be used for background design */}
       </div>
     </div>
   );
 };
 
-export default LoginPage;
+export default Login;
