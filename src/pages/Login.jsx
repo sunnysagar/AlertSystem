@@ -1,4 +1,5 @@
-import React, { useContext, useState } from "react";
+import React, {useState } from "react";
+import { FaGoogle } from "react-icons/fa"; // Import Google Icon
 import "../styles/Login.css"; // Import CSS file
 import { useAuth } from "../context/AuthContext";
 
@@ -30,37 +31,45 @@ const Login = () => {
 
         <form onSubmit={handleSubmit}>
           <label for="email">Email *</label>
-          <input type="email" placeholder="Enter your mail address" id="email" required />
+          <input type="email" 
+                  placeholder="Enter your mail address" 
+                  id="email"
+                  required
+                  onChange={(e) => setEmail(e.target.value)} />
 
           <label for="password">Password *</label>
           <div className="password-field">
-            <input type="password" placeholder="Enter password" id="password" required />
+            <input 
+                  type="password" 
+                  placeholder="Enter password" 
+                  id="password"
+                  required
+                  onChange={(e) => setPassword(e.target.value)} />
             <span className="eye-icon">👁️</span>
           </div>
 
-          <div className="remember-forgot">
-            <label>
-              <input type="checkbox" /> Remember me
-            </label>
-            <a href="#">Forgot your password?</a>
-          </div>
+           <div className="remember-forgot">
+          <label>
+            <input type="checkbox" /> Remember me
+          </label>
+          <a href="#">Forgot your password?</a>
+            </div>
 
-          <button className="login-btn">Log In</button>
-        </form>
+            <button className="login-btn">Log In</button>
+          </form>
 
-        <div className="or-divider">Or, Login with</div>
+          <div className="or-divider">Or, Login with</div>
 
-        <button className="google-btn">
-          <img src="https://img.icons8.com/color/48/000000/google-logo.png" alt="Google" />
-          Sign up with Google
-        </button>
+          <button className="google-btn">
+          <FaGoogle className="google-icon" /> Sign up with Google
+          </button>
 
-        <p className="register-link">
-          Don't have an account? <a href="#">Register here</a>
-        </p>
-      </div>
+          <p className="register-link">
+            Don't have an account? <a href="#">Register here</a>
+          </p>
+        </div>
 
-      {/* Right Section: Decorative Panel */}
+        {/* Right Section: Decorative Panel */}
       <div className="login-decor">
         {/* This div will be used for background design */}
       </div>
