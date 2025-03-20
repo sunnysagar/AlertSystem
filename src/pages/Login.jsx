@@ -29,7 +29,7 @@ const Login = () => {
       { /* Left Section: Login Form  */}
         <div className="login-form">
           <div className="logo">
-            <img src="C:\Users\pranj\Desktop\Alert Generator - Photos\CI.png" alt="Company Logo" />
+            <img src={companyLogo} alt="Company Logo" />
           </div>
         <h2>Welcome back !</h2>
         <p>Enter to get unlimited access to data & information.</p>
