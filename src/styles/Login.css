@@ -113,10 +113,12 @@ input {
   font-size: 14px;
 }
 
-.google-btn img {
-  width: 20px;
+.google-icon {
+  font-size: 20px;
+  color: #db4437; /* Google's Red Color */
   margin-right: 10px;
 }
+
 
 /* Register Link */
 .register-link {
