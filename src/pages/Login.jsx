@@ -1,12 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import loginImage from "../assets/login_img.jpg";
 import companyLogo from "../assets/company_logo.png"; // Import Company Logo
 import google_logo from "../assets/google_logo.png";
-import { FaGoogle } from "react-icons/fa"; // Import Google Icon
-import React, { useState } from "react";
 import "../styles/Login.css"; // Import CSS file
 import { useAuth } from "../context/AuthContext";
-import companyLogo from "../assets/company-logo.png";
 
 const Login = () => {
   const[email, setEmail] = useState("");
