@@ -1,18 +1,23 @@
 .register-container {
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    background-color: #f9f9f9;
+   
   }
   
   .register-form {
     background: #fff;
     padding: 2rem;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: auto;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+    width: 90%;
+    height: 90%;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
   }
 
   .register-form label {
@@ -33,7 +38,7 @@
     border-radius: 4px;
   }
   
-  .register-btn {
+  .register-form .register-btn {
     width: 100%;
     padding: 10px;
     background-color: #007bff;
@@ -41,6 +46,7 @@
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    margin-left: 0.8rem;
   }
   
   .login-link {

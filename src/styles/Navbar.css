@@ -4,7 +4,7 @@
     justify-content: space-between;
     align-items: center;
     background-color: #2d6cbe; /* Dark Gray (Tailwind bg-gray-800) */
-    padding: 12px 24px;
+    padding: 7px 14px;
   }
   
   /* Group for left and right icons */
