@@ -3,6 +3,7 @@ import { AuthProvider } from './context/AuthContext'
 // import './App.css'
 import Homepage from './pages/Homepage'
 import Login from './pages/Login'
+import Register from './pages/Register'
 
 
 
@@ -14,8 +15,7 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/" element={<Homepage />} />
-         
-          {/* <Route path="/signup" element={<Signup />} /> */}
+          <Route path="/register" element={<Register />} />
         </Routes>
       </AuthProvider>
    </Router>
