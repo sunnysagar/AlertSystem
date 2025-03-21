@@ -42,8 +42,7 @@ export const AuthProvider = ({ children }) => {
     // signup function
     const signup = async(user) => {
         try {
-            const response = await axios.post("http://127.0.0.1:8000/auth/register", 
-                { user });
+            const response = await axios.post("http://127.0.0.1:8000/auth/register", user );
                 if(response)
                     navigate("/login");
 
