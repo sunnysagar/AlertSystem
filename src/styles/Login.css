@@ -96,7 +96,7 @@ input {
 
 /* Make "Forgot password" float to the right */
 .remember-forgot a {
-  color: #5b21b6;
+  color: #007bff;
   text-decoration: none;
   font-weight: bold;
   margin-left: auto;  /* Push it to the right */
@@ -111,7 +111,7 @@ input {
 .login-btn {
   width: 100%;
   padding: 12px;
-  background: #5b21b6;
+  background: #007bff;
   color: white;
   border: none;
   border-radius: 5px;
@@ -151,7 +151,7 @@ input {
 }
 
 .register-link a {
-  color: #5b21b6;
+  color: #007bff;
   font-weight: bold;
   text-decoration: none;
 }
