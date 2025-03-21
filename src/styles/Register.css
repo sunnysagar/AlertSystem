@@ -1,55 +1,81 @@
 .register-container {
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-   
-  }
-  
-  .register-form {
-    background: #fff;
-    padding: 2rem;
-    border-radius: 8px;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
-    width: 90%;
-    height: 90%;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+}
 
-  .register-form label {
-    text-align: left;
-    display: block;
-    margin-bottom: 5px;
-  }
-  
-  .register-form h2 {
-    margin-bottom: 10px;
-  }
-  
-  .register-form input {
-    width: 100%;
-    padding: 10px;
-    margin: 8px 0;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  .register-form .register-btn {
-    width: 100%;
-    padding: 10px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-left: 0.8rem;
-  }
-  
-  .login-link {
-    margin-top: 10px;
-  }
-  
+/* Left Side: Signup Form */
+.register-form {
+  width: 50%;
+  background: #fff;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center; /* Align form to left */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.register-form h2 {
+  margin-bottom: 10px;
+}
+
+.register-form p {
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.register-form form {
+  width: 100%;
+  max-width: 320px;
+}
+
+.register-form label {
+  /* text-align: left; */
+  display: block;
+  font-size: 14px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.register-form input {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.register-btn {
+  width: 100%;
+  padding: 12px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.login-link {
+  margin-top: 10px;
+}
+
+.login-link a {
+  color: #007bff;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+/* Right Side: Image */
+.register-image {
+  flex: 1;
+  display: flex;
+}
+
+.register-image img {
+  width: 100%;
+  /* max-width: 500px; */
+  /* border-radius: 10px; */
+}

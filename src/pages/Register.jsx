@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/Register.css"; // Import CSS file for styling
 import { useAuth } from "../context/AuthContext";
+import RegisterImage from "../assets/login_img.jpg"; // Add an image for the right side
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -15,14 +16,13 @@ const Register = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    signup({ name, department, email, password });
-    
+
     if (password !== confirmPassword) {
       setError("Passwords do not match");
       return;
     }
 
-    // Here, send data to backend (API request for user registration)
+    signup({ name, department, email, password });
     console.log("User Registered:", { name, department, email, password });
 
     // Redirect to login after successful registration
@@ -31,6 +31,7 @@ const Register = () => {
 
   return (
     <div className="register-container">
+      {/* Left Side: Form */}
       <div className="register-form">
         <h2>Sign Up</h2>
         <p>Create a new account</p>
@@ -59,6 +60,11 @@ const Register = () => {
         <p className="login-link">
           Already have an account? <Link to="/login">Login here</Link>
         </p>
+      </div>
+
+      {/* Right Side: Image */}
+      <div className="register-image">
+        <img src={RegisterImage} alt="Signup" />
       </div>
     </div>
   );
