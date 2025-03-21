@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/Register.css"; // Import CSS file for styling
+import { useAuth } from "../context/AuthContext";
 
 const Register = () => {
   const [name, setName] = useState("");
@@ -10,9 +11,11 @@ const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const { signup } = useAuth();
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    signup({ name, department, email, password });
     
     if (password !== confirmPassword) {
       setError("Passwords do not match");
