@@ -18,6 +18,12 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
+.login-form label {
+  text-align: left;
+  display: block;
+  margin-bottom: 5px;
+}
+
 .logo img{
   width: 120px;
   margin-right: 10px;
@@ -55,7 +61,7 @@ input {
   border-radius: 5px;
 }
 
-.password-field {
+.password-field, .email-field {
   display: flex;
   align-items: center;
   position: relative;
@@ -70,14 +76,36 @@ input {
 .remember-forgot {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   font-size: 12px;
   margin-top: 10px;
 }
 
+/* Adjusting checkbox and label placement */
+.remember-forgot label {
+
+  display: flex;
+  align-items: center;
+  gap: 1px;  /*space between checkbox and text */
+}
+
+.remember-forgot input {
+  width:auto;
+  cursor: pointer;
+}
+
+/* Make "Forgot password" float to the right */
 .remember-forgot a {
   color: #5b21b6;
   text-decoration: none;
   font-weight: bold;
+  margin-left: auto;  /* Push it to the right */
+  padding: 2px;
+
+}
+
+.remember-forgot a:hover {
+  text-decoration: underline;
 }
 
 .login-btn {
@@ -134,8 +162,8 @@ input {
    /* A stylish purple shade */
   display: flex;
   /* justify-content: center;
-  align-items: center; */
-  /* border: #777 solid 1px; */
+  align-items: center;
+  border: #777 solid 1px; */
 }
 
 .login-image {

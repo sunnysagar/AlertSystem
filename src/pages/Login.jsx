@@ -7,7 +7,7 @@
  * It also includes error handling for invalid login attempts.
  * 
  */
-
+import { Link } from "react-router-dom";
 import React, { useState } from "react";
 import loginImage from "../assets/login_img.jpg";
 import companyLogo from "../assets/company_logo.png";
@@ -16,9 +16,10 @@ import "../styles/Login.css"; // Import CSS file for login page
 import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
-  const[email, setEmail] = useState("");
-  const[password, setPassword] = useState("");
-  const[error, setError] = useState(null);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
   const { login } = useAuth();
 
   const handleSubmit = async (e) => {
@@ -30,62 +31,72 @@ const Login = () => {
     }
   };
 
-   
+  const tooglePassword = () =>{
+    setShowPassword(!showPassword);
+  };
+
+
   return (
     <div className="login-container">
       { /* Left Section: Login Form  */}
-        <div className="login-form">
-          <div className="logo">
-            <img src={companyLogo} alt="Company Logo" />
-          </div>
+      <div className="login-form">
+        <div className="logo">
+          <img src={companyLogo} alt="Company Logo" />
+        </div>
         <h2>Corossion Intel</h2>
         <p>Pre-Failure Alarm Generation System.</p>
 
         {error && <p className="error-message">{error}</p>}
 
         <form onSubmit={handleSubmit}>
-          <label for="email">Email *</label>
-          <input type="email" 
-                  placeholder="Enter your mail address" 
-                  id="email"
-                  required
-                  onChange={(e) => setEmail(e.target.value)} />
+        <label for="email">Email *</label>
+          <div className="email-field">
+            <input type="email"
+              placeholder="Enter your mail address"
+              id="email"
+              required
+              onChange={(e) => setEmail(e.target.value)} />
 
+          </div>
+          
           <label for="password">Password *</label>
           <div className="password-field">
-            <input 
-                  type="password" 
-                  placeholder="Enter password" 
-                  id="password"
-                  required
-                  onChange={(e) => setPassword(e.target.value)} />
-            <span className="eye-icon">👁️</span>
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Enter password"
+              id="password"
+              required
+              onChange={(e) => setPassword(e.target.value)} />
+            <span 
+            className="eye-icon"
+            onClick={tooglePassword}
+            >{showPassword ? "🙈" : "👁️"}</span>
           </div>
 
-           <div className="remember-forgot">
-          <label>
-            <input type="checkbox" /> Remember me
-          </label>
-          <a href="#">Forgot your password?</a>
-            </div>
+          <div className="remember-forgot">
+            <label >
+              <input type="checkbox" />Remember me
+            </label>
+            <a href="#">Forgot your password?</a>
+          </div>
 
-            <button className="login-btn">Log In</button>
-          </form>
+          <button className="login-btn">Log In</button>
+        </form>
 
-          <div className="or-divider">Or Login with</div>
+        {/* <div className="or-divider">Or Login with</div> */}
 
-          <button className="google-btn">
+        {/* <button className="google-btn">
           <img src={google_logo} alt="Google Logo" /> Sign in with Google
-          </button>
+        </button> */}
 
-          <p className="register-link">
-            Don't have an account? <a href="#">Register here</a>
-          </p>
-        </div>
+        <p className="register-link">
+          Don't have an account? <Link to="/register">Register here</Link>
+        </p>
+      </div>
 
-        {/* Right Section: Decorative Panel */}
+      {/* Right Section: Decorative Panel */}
       <div className="login-decor">
-      <img src={loginImage} alt="Login Illustration" className="login-image" />
+        <img src={loginImage} alt="Login Illustration" className="login-image" />
       </div>
     </div>
   );
