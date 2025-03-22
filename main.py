@@ -26,6 +26,8 @@ import time
 import threading
 from pymodbus.client import ModbusTcpClient
 import subprocess
+from bson import ObjectId
+from fastapi.encoders import jsonable_encoder
 
 app = FastAPI(title="Alert System Web App")
 process=None
@@ -105,8 +107,7 @@ def stop_plc():
     running = False
     return {"message": "PLC data collection stopped"}
 
-from bson import ObjectId
-from fastapi.encoders import jsonable_encoder
+
 
 def convert_objectid(obj):
     """Recursively converts ObjectId fields to string."""
@@ -126,25 +127,6 @@ async def get_latest_data():
         data = convert_objectid(data)  # Convert ObjectId to string
         return jsonable_encoder(data)
     return {"message": "No data found"}
-
-# @app.get("/latest_data", dependencies=[Depends(oauth2_scheme)])
-# async def get_latest_data():
-#     data = await plc_collection.find_one({}, sort=[("_id", -1)])
-#     if data:
-#         return jsonable_encoder(data, custom_encoder={ObjectId: str})
-#     return {"message": "No data found"}
-
-# @app.get("/latest_data", dependencies=[Depends(oauth2_scheme)])
-# async def get_latest_data():
-
-#     """ Retrieve the latest counter data from MongoDB (Async Fix) """
-#     latest_data_cursor = plc_collection.find().sort("timestamp", -1).limit(1)
-#     latest_data_list = await latest_data_cursor.to_list(length=1)  # ✅ Await to resolve cursor
-
-#     if not latest_data_list:
-#         raise HTTPException(status_code=404, detail="No data found")
-
-#     return latest_data_list[0]  # Return the latest record
 
 app.add_middleware(
     CORSMiddleware,
