@@ -8,14 +8,16 @@ import Sidebar from "../components/Sidebar";
 const Homepage = () => {
     return (
         <div className="homepage">
-            <header>
-            <Navbar />
+            <div className="navbar-container">
+                <Navbar />
+            </div>
+           
             <div className="sidebar-container">
                 <Sidebar />
             </div>
            
             {/* <h1>Homepage</h1> */}
-            </header>
+           
             {/* <PLCControl /> */}
          
         </div>

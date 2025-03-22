@@ -3,6 +3,14 @@ import { useAuth } from "../context/AuthContext";
 import axios from "axios";
 import "../styles/Sidebar.css";
 import { useLocation } from "react-router-dom";
+import home from "../assets/home.png";
+import logout_icon from "../assets/logout.png";
+import profile from "../assets/profile.png";
+import filter from "../assets/filter.png";
+import history from "../assets/history.png";
+import feedback from "../assets/feedback.png";
+import settings from "../assets/settings.png";
+
 
 
 export default function Sidebar() {
@@ -41,7 +49,7 @@ export default function Sidebar() {
                 break;
         };
 
-        fetchUserInfo();
+        // fetchUserInfo();
     }, [location.pathname]);
 
     const fetchUserInfo = async() => {
@@ -68,30 +76,34 @@ export default function Sidebar() {
             <div className="sidebar-content">
                 <ul>
                     <li className={isActive === "home" ? "active" : ""} onClick={() => handleTabClick("home")}>
-                        <i className="fas fa-home"></i>Home
+                        <img src={home} alt="home"  className="icon-tab"/>Home
                     </li>
                     <li className={isActive === "Filtration" ? "active" : ""} onClick={() => handleTabClick("Filtration")}>
-                        <i className="fas fa-filter"></i>Filtration
+                    <img src={filter} alt="home"  className="icon-tab"/>Filtration
                     </li>
                     <li className={isActive === "History" ? "active" : ""} onClick={() => handleTabClick("History")}>
-                        <i className="fas fa-history"></i>History
+                    <img src={history} alt="home"  className="icon-tab"/>History
                     </li>
                     <li className={isActive === "Feedback" ? "active" : ""} onClick={() => handleTabClick("Feedback")}>
-                        <i className="fas fa-comment"></i>Feedback
+                    <img src={feedback} alt="home"  className="icon-tab"/>Feedback
                     </li>
                     <li className={isActive === "Settings" ? "active" : ""} onClick={() => handleTabClick("Settings")}>
-                        <i className="fas fa-cog"></i>Settings
+                    <img src={settings} alt="home"  className="icon-tab"/>Settings
                     </li>
-                    <li className={isActive === "Profile" ? "active" : ""} onClick={() => handleTabClick("Profile")}>
-                        <i className="fas fa-user"></i>Profile
-                    </li>
-                    <li onClick={handleLogout}>
-                        <i className="fas fa-sign-out-alt"></i>Logout
-                    </li>
+                   
                 </ul>
             </div>
             <div className="sidebar-footer">
-                <p>{userInfo && userInfo.name}</p>
+
+                <ul>
+                    <li className={isActive === "Profile" ? "active" : "pro"} onClick={() => handleTabClick("Profile")} id="profile">
+                        <img src={profile} alt="" />
+                    </li>
+                    <li onClick={handleLogout} id="logout">
+                        <img src={logout_icon} alt="logout" /> Logout
+                    </li>
+                </ul>
+               
         </div>
         </div>
     );
