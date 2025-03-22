@@ -4,6 +4,7 @@
   width: 100vw;
   height: 100vh;
   background: #f0f2f5;
+  font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
 /* Left: Login Form */
@@ -97,22 +98,23 @@ input {
 
 /* Make "Forgot password" float to the right */
 .remember-forgot a {
-  color: #007bff;
+  color: #046c51;
   text-decoration: none;
   font-weight: bold;
   margin-left: auto;  /* Push it to the right */
   padding: 2px;
-
+  transition: color 0.3s;
 }
 
 .remember-forgot a:hover {
-  text-decoration: underline;
+  /* text-decoration: underline; */
+  color: #007bff;
 }
 
 .login-btn {
   width: 100%;
   padding: 12px;
-  background: #007bff;
+  background: #043E2F;
   color: white;
   border: none;
   border-radius: 5px;
@@ -152,10 +154,14 @@ input {
 }
 
 .register-link a {
-  color: #007bff;
+  color: #046c51;
   font-weight: bold;
   text-decoration: none;
 }
+.register-link a:hover {
+  color: #007bff;
+}
+
 
 /* Right: Decorative Panel */
 .login-decor {

@@ -51,7 +51,7 @@
 .register-btn {
   width: 100%;
   padding: 12px;
-  background: #007bff;
+  background: #043E2F;
   color: white;
   border: none;
   border-radius: 5px;
@@ -64,9 +64,12 @@
   margin-top: 10px;
 }
 .login-link a {
-  color: #007bff;
+  color:#046c51;
   text-decoration: none;
   font-weight: bold;
+}
+.login-link a:hover {
+  color : #007bff;
 }
 
 /* Right Side: Image */
