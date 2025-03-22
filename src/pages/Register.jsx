@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/Register.css"; // Import CSS file for styling
+import RegisterImage from "../assets/login_img.jpg";
 import { useAuth } from "../context/AuthContext";
 
 const Register = () => {
@@ -93,6 +94,10 @@ const Register = () => {
         <p className="login-link">
           Already have an account? <Link to="/login">Login here</Link>
         </p>
+      </div>
+      {/* Right Side: Image */}
+      <div className="register-image">
+        <img src={RegisterImage} alt="Signup" />
       </div>
     </div>
   );
