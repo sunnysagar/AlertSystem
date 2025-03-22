@@ -1,0 +1,9 @@
+fastapi[all]
+motor
+pymongo
+argon2-cffi
+python-jose[cryptography]           # JWT token generation
+python-multipart                    # Form data handling
+pymodbus                           # Modbus TCP/IP communication
+pandas
+passlib

@@ -1,0 +1,7 @@
+# Ignore python virtual env
+venv
+
+#  Byte-compiled / binary files
+__pycache__/
+*.py[cod]
+*$py.class
