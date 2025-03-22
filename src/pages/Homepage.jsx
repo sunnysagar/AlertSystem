@@ -1,6 +1,7 @@
 import React from "react";
 import { Navbar } from "../components/Navbar";
 import "../styles/Homepage.css";
+import PLCControl from "../PLC/plc_read";
 
 
 const Homepage = () => {
@@ -10,6 +11,7 @@ const Homepage = () => {
             <Navbar />
             <h1>Homepage</h1>
             </header>
+            <PLCControl />
          
         </div>
     );
