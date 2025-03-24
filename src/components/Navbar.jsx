@@ -5,7 +5,7 @@ import dashboard from '../assets/dashboard.png';
 import reportGenrator from '../assets/analysis.png';
 import alarm from '../assets/bell.png';
 import companyLogo from '../assets/company_logo.png';
-import home from '../assets/home.png';
+import plc from '../assets/plc.png';
 
 import '../styles/Navbar.css';
 import { useNavigate } from 'react-router-dom';
@@ -18,7 +18,8 @@ export const Navbar = () =>{
 
     const navItems = [
         { id: 'Data View', icon: dataView, link: '/data-view', label: 'Data View' },
-        { id: 'Dashboard', icon: dashboard, link: '/plc', label: 'Dashboard' },
+        { id: 'Dashboard', icon: dashboard, link: '/dashboard', label: 'Dashboard' },
+        {id: 'PLC', icon: plc, link: '/plc', label: 'PLC'},
         { id: 'Report Generator', icon: reportGenrator, link: '/report-generator', label: 'Report Generator' },
         { id: 'Notification', icon: alarm, link: '/alarm', label: 'Notification' },
     ];
@@ -28,14 +29,14 @@ export const Navbar = () =>{
         <div className='navbar'>
             {/* left icons */}
            <div className='nav-group'>
-                {navItems.slice(0, 2).map((item) => (
+                {navItems.slice(0, 3).map((item) => (
                     <NavItem key={item.id} item={item} active={active} setActive={setActive} />
                 ))}
 
            </div>
               {/* right icons */}
             <div className='nav-group'>
-                 {navItems.slice(2).map((item) => (
+                 {navItems.slice(3).map((item) => (
                       <NavItem key={item.id} item={item} active={active} setActive={setActive} />
                  ))}
 
