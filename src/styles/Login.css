@@ -29,35 +29,34 @@
 .logo img{
   width: 280px;
   margin-right: 10px;
-
 }
 
-h2 {
-  font-size: 26px;
-  color:antiquewhite;
+.login-form h2 {
+  font-size: 40px;
+  color:aqua;
   font-weight: bold;
   margin-bottom: 10px;
 }
 
-p {
+.login-form p {
   font-size: 14px;
-  color: #555;
+  color: antiquewhite;
   margin-bottom: 20px;
 }
 
-form {
+.login-form form {
   width: 100%;
   max-width: 320px;
 }
 
-label {
+.login-form label {
   font-size: 14px;
   font-weight: bold;
   display: block;
   margin-top: 10px;
 }
 
-input {
+.login-form input {
   width: 100%;
   padding: 10px;
   margin-top: 5px;
@@ -100,7 +99,7 @@ input {
 
 /* Make "Forgot password" float to the right */
 .remember-forgot a {
-  color: #046c51;
+  color: #24b190;
   text-decoration: none;
   font-weight: bold;
   margin-left: auto;  /* Push it to the right */
@@ -116,7 +115,7 @@ input {
 .login-btn {
   width: 100%;
   padding: 12px;
-  background: #01c258;
+  background: #24b190;
   font-weight: bold;
   color: white;
   border: none;
@@ -152,12 +151,13 @@ input {
 
 /* Register Link */
 .register-link {
-  margin-top: 20px;
+  margin-top: 15px;
   font-size: 14px;
+  color:antiquewhite;
 }
 
 .register-link a {
-  color: #046c51;
+  color: #24b190;
   font-weight: bold;
   text-decoration: none;
 }
