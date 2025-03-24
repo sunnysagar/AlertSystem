@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from "recharts";
 
-export const Dashboard = () => {
+const Dashboard = () => {
     const [data, setData] = useState([]);
     const maxPoints = 50;
     const [isRunning, setIsRunning] = useState(true);

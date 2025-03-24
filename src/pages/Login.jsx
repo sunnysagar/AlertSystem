@@ -31,7 +31,7 @@ const Login = () => {
     }
   };
 
-  const tooglePassword = () =>{
+  const togglePassword = () =>{
     setShowPassword(!showPassword);
   };
 
@@ -69,7 +69,7 @@ const Login = () => {
               onChange={(e) => setPassword(e.target.value)} />
             <span 
             className="eye-icon"
-            onClick={tooglePassword}
+            onClick={togglePassword}
             >{showPassword ? "🙈" : "👁️"}</span>
           </div>
 
@@ -77,7 +77,9 @@ const Login = () => {
             <label >
               <input type="checkbox" />Remember me
             </label>
-            <a href="#">Forgot your password?</a>
+            <p className="login-link">
+              <Link to="/forgot-password">Forgot Password?</Link>
+            </p>
           </div>
 
           <button className="login-btn">Log In</button>

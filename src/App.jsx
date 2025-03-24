@@ -6,6 +6,7 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import PLCControl from './PLC/plc_read'
 import Dashboard from './pages/Dashboard'
+import ForgotPassword from "./pages/ForgotPassword";
 
 
 
@@ -20,6 +21,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path='/dashboard' element={<Dashboard />} />
           <Route path='/plc' element={<PLCControl />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
         </Routes>
       </AuthProvider>
    </Router>
