@@ -2,12 +2,14 @@
   display: flex;
   width: 100vw;
   height: 100vh;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  background-color: #043E2F;
 }
 
 /* Left Side: Signup Form */
 .register-form {
   width: 50%;
-  background: #fff;
+
   padding: 3rem;
   display: flex;
   flex-direction: column;
@@ -52,7 +54,8 @@
 .register-btn {
   width: 100%;
   padding: 12px;
-  background: #043E2F;
+  background: #01c258;
+  font-weight: bold;
   color: white;
   border: none;
   border-radius: 5px;

@@ -116,7 +116,8 @@ input {
 .login-btn {
   width: 100%;
   padding: 12px;
-  background: #043E2F;
+  background: #01c258;
+  font-weight: bold;
   color: white;
   border: none;
   border-radius: 5px;
