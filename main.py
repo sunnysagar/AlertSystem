@@ -16,18 +16,21 @@ Example:
 Attributes:
     app (FastAPI): The FastAPI application instance.
 """
-from fastapi import FastAPI, BackgroundTasks, Depends, HTTPException
+from fastapi import FastAPI, BackgroundTasks, Depends, HTTPException, WebSocket
 from app.routes import auth, users
 from fastapi.middleware.cors import CORSMiddleware
 from app.auth.auth import oauth2_scheme, get_current_user
-from app.database import plc_collection
+from app.database import plc_collection, original_collection
+from app.services.anomalies_process import websocket_endpoint, monitor_data, get_anomalies
 from datetime import datetime
+import asyncio
 import time
 import threading
 from pymodbus.client import ModbusTcpClient
 import subprocess
 from bson import ObjectId
 from fastapi.encoders import jsonable_encoder
+
 
 app = FastAPI(title="Alert System Web App")
 process=None
@@ -43,13 +46,6 @@ origins = [
     "http://localhost:5174",
 ]
 
-
-# MongoDB Configuration
-# mongo_client = MongoClient("mongodb://localhost:27017/")
-# db = mongo_client["plc_database"]
-# plc_collection = db["plc_data"]
-
-
 # OpenPLC Configuration
 PLC_IP = "192.168.1.181"
 PLC_PORT = 502
@@ -63,9 +59,13 @@ client.connect()
 running = False
 plc_thread = None
 
+# counter to track inserts
+record_count = 0
+batch_data = []
+
 def read_plc_task():
     """ Continuously read PLC data and store it in MongoDB """
-    global running
+    global running, record_count, batch_data
     while running:
         result = client.read_holding_registers(REGISTER_ADDRESSES[0], count=len(REGISTER_ADDRESSES))
         if result.isError():
@@ -77,12 +77,29 @@ def read_plc_task():
         timestamp = datetime.now()
 
         # Store data in MongoDB
-        plc_collection.insert_one({
+        plc_record = {
             "timestamp": timestamp,
             **{f"counter_value{i+1}": counter_values[i] for i in range(len(counter_values))}
-        })
+        }
 
-        print(f"Stored PLC Data at {timestamp}")  # Debugging info
+        # Store in the primary database
+        plc_collection.insert_one(plc_record)
+        print(f"Stored PLC Data at {timestamp}")
+
+        # Add to batch list
+        batch_data.append(plc_record)
+        record_count += 1
+
+        # when 100 records are inserted, store in the original database
+        if record_count == 100:
+            original_collection.insert_many(batch_data)  # Bulk insert
+            print(f"Moved {record_count} records to the archive database.")
+            
+            record_count = 0
+            batch_data = []
+            
+
+        # print(f"Stored PLC Data at {timestamp}")  # Debugging info
         time.sleep(1)
 
 @app.post("/start_plc", dependencies=[Depends(oauth2_scheme)])
@@ -128,6 +145,17 @@ async def get_latest_data():
         return jsonable_encoder(data)
     return {"message": "No data found"}
 
+@app.websocket("/ws")
+async def websocket_route(websocket: WebSocket):
+    await websocket_endpoint(websocket)
+
+@app.on_event("startup")
+async def startup_event():
+    asyncio.create_task(monitor_data())
+
+@app.get("/fetch_anomalies")
+def fetch_anomalies():
+    return get_anomalies()
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,

@@ -24,3 +24,7 @@ database = client[DB_NAME]
 users_collection = database.get_collection("users")
 
 plc_collection = database.get_collection("plc_data")
+
+original_collection = database.get_collection("originalDB")
+
+info_collection = database.get_collection("infoDB")
