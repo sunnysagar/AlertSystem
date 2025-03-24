@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/Register.css"; // Import CSS file for styling
-import RegisterImage from "../assets/login_img.jpg";
+import RegisterImage from "../assets/login_img2.jpg";
 import { useAuth } from "../context/AuthContext";
 
 const Register = () => {

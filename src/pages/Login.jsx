@@ -9,7 +9,7 @@
  */
 import { Link } from "react-router-dom";
 import React, { useState } from "react";
-import loginImage from "../assets/login_img.jpg";
+import loginImage from "../assets/login_img2.jpg";
 import companyLogo from "../assets/company_logo.png";
 import google_logo from "../assets/google_logo.png";
 import "../styles/Login.css"; // Import CSS file for login page
