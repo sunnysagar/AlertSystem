@@ -43,7 +43,7 @@ const Login = () => {
         <div className="logo">
           <img src={companyLogo} alt="Company Logo" />
         </div>
-        <h2>Corossion Intel</h2>
+        <h2>Login</h2>
         <p>Pre-Failure Alarm Generation System.</p>
 
         {error && <p className="error-message">{error}</p>}
