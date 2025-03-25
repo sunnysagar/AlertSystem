@@ -63,44 +63,55 @@ plc_thread = None
 record_count = 0
 batch_data = []
 
-def read_plc_task():
-    """ Continuously read PLC data and store it in MongoDB """
+async def insert_plc_record_async(plc_record):
+    """Insert a single PLC record asynchronously into MongoDB."""
+    await plc_collection.insert_one(plc_record)
+
+async def insert_many_plc_records_async(records):
+    """Insert multiple PLC records asynchronously into MongoDB."""
+    if records:
+        await original_collection.insert_many(records)
+
+async def read_plc_task():
+    """ Continuously read PLC data and store it in MongoDB when running = True """
     global running, record_count, batch_data
-    while running:
-        result = client.read_holding_registers(REGISTER_ADDRESSES[0], count=len(REGISTER_ADDRESSES))
-        if result.isError():
-            print("Error reading from PLC")
-            time.sleep(2)
-            continue
+    while True:
+        if running:
+            result = client.read_holding_registers(REGISTER_ADDRESSES[0], count=len(REGISTER_ADDRESSES))
+            if result.isError():
+                print("Error reading from PLC")
+                await asyncio.sleep(2)
+                continue
 
-        counter_values = result.registers
-        timestamp = datetime.now()
+            counter_values = result.registers
+            timestamp = datetime.now()
 
-        # Store data in MongoDB
-        plc_record = {
-            "timestamp": timestamp,
-            **{f"counter_value{i+1}": counter_values[i] for i in range(len(counter_values))}
-        }
+            # Store data in MongoDB
+            plc_record = {
+                "timestamp": timestamp,
+                **{f"counter_value{i+1}": counter_values[i] for i in range(len(counter_values))}
+            }
 
-        # Store in the primary database
-        plc_collection.insert_one(plc_record)
-        print(f"Stored PLC Data at {timestamp}")
+            # Store in the primary database
+            plc_collection.insert_one(plc_record)
+            print(f"Stored PLC Data at {timestamp}")
 
-        # Add to batch list
-        batch_data.append(plc_record)
-        record_count += 1
+            # Add to batch list
+            batch_data.append(plc_record)
+            record_count += 1
 
-        # when 100 records are inserted, store in the original database
-        if record_count == 100:
-            original_collection.insert_many(batch_data)  # Bulk insert
-            print(f"Moved {record_count} records to the archive database.")
-            
-            record_count = 0
-            batch_data = []
-            
+            # When 100 records are inserted, store in the original database
+            if record_count == 100:
+                original_collection.insert_many(batch_data)  # Bulk insert
+                # print(f"Moved {record_count} records to the archive database.")
+                
+                record_count = 0
+                batch_data = []
 
-        # print(f"Stored PLC Data at {timestamp}")  # Debugging info
-        time.sleep(1)
+        else:
+            print("PLC monitoring paused...")
+
+        await asyncio.sleep(1)  # Prevent CPU overuse
 
 @app.post("/start_plc", dependencies=[Depends(oauth2_scheme)])
 def start_plc(background_tasks: BackgroundTasks):
@@ -137,7 +148,7 @@ def convert_objectid(obj):
     else:
         return obj
 
-@app.get("/latest_data", dependencies=[Depends(oauth2_scheme)])
+@app.get("/plc/latest-data", dependencies=[Depends(oauth2_scheme)])
 async def get_latest_data():
     data = await plc_collection.find_one({}, sort=[("_id", -1)])  # Fetch latest data
     if data:
@@ -145,20 +156,24 @@ async def get_latest_data():
         return jsonable_encoder(data)
     return {"message": "No data found"}
 
+# anomalies process endpoints
 @app.websocket("/ws")
 async def websocket_route(websocket: WebSocket):
     await websocket_endpoint(websocket)
 
 @app.on_event("startup")
 async def startup_event():
-    asyncio.create_task(monitor_data())
+    asyncio.create_task(monitor_data())  # Start monitoring unconditionally
+    print("Monitor is started")
 
-@app.get("/fetch_anomalies")
-def fetch_anomalies():
-    return get_anomalies()
+
+@app.get("/info/fetch-anomalies", dependencies=[Depends(oauth2_scheme)])
+async def fetch_anomalies():
+    return await get_anomalies()
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=origins, 
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

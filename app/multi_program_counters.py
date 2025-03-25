@@ -26,7 +26,7 @@ from database import plc_collection
 from pymongo import MongoClient
 
 # OpenPLC Configuration
-PLC_IP = "192.168.44.76"
+PLC_IP = "192.168.1.181"
 PLC_PORT = 502  # Single Modbus device, one port
 REGISTER_ADDRESSES = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]  # Adjust if needed
 
