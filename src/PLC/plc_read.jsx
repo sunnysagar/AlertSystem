@@ -37,7 +37,7 @@ const PLCControl = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get("http://127.0.0.1:8000/latest_data", {
+                const response = await axios.get("http://127.0.0.1:8000/plc/latest-data", {
                     headers: {
                         Authorization: `Bearer ${token}`
                     }
