@@ -17,7 +17,7 @@ export const Navbar = () =>{
    
 
     const navItems = [
-        { id: 'Data View', icon: dataView, link: '/data-view', label: 'Data View' },
+        { id: 'Data View', icon: dataView, link: '/dashboardr', label: 'Data View' },
         { id: 'Dashboard', icon: dashboard, link: '/dashboard', label: 'Dashboard' },
         {id: 'PLC', icon: plc, link: '/plc', label: 'PLC'},
         { id: 'Report Generator', icon: reportGenrator, link: '/report-generator', label: 'Report Generator' },
