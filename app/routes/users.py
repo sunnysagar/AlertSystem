@@ -23,34 +23,34 @@ from app.auth.auth import oauth2_scheme, get_current_user
 import pymongo
 from fastapi.security import OAuth2PasswordBearer
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
+# oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
 
 router = APIRouter()
 
-async def get_current_use(token: str = Depends(oauth2_scheme)):
-    """
-    Retrieve the current user based on the provided JWT token.
-    This function decodes the JWT token to extract the user's email and fetches
-    the corresponding user data from the database. If the token is invalid or
-    the user cannot be found, an HTTP exception is raised.
-    Args:
-        token (str): The JWT token provided by the client, extracted using the
-                     `Depends` mechanism with `oauth2_scheme`.
-    Returns:
-        dict: The user document retrieved from the database.
-    Raises:
-        HTTPException: If the token is invalid or the user cannot be found.
-    """
+# async def get_current_use(token: str = Depends(oauth2_scheme)):
+#     """
+#     Retrieve the current user based on the provided JWT token.
+#     This function decodes the JWT token to extract the user's email and fetches
+#     the corresponding user data from the database. If the token is invalid or
+#     the user cannot be found, an HTTP exception is raised.
+#     Args:
+#         token (str): The JWT token provided by the client, extracted using the
+#                      `Depends` mechanism with `oauth2_scheme`.
+#     Returns:
+#         dict: The user document retrieved from the database.
+#     Raises:
+#         HTTPException: If the token is invalid or the user cannot be found.
+#     """
 
-    try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        email: str = payload.get("sub")
-        if email is None:
-            raise HTTPException(status_code=401, detail="Invalid token")
-        user = await users_collection.find_one({"email": email})
-        return user
-    except JWTError:
-        raise HTTPException(status_code=401, detail="Invalid token")
+#     try:
+#         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+#         email: str = payload.get("sub")
+#         if email is None:
+#             raise HTTPException(status_code=401, detail="Invalid token")
+#         user = await users_collection.find_one({"email": email})
+#         return user
+#     except JWTError:
+#         raise HTTPException(status_code=401, detail="Invalid token")
 
 @router.get("/profile")
 async def get_profile(user: dict = Depends(get_current_user)):
