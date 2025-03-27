@@ -193,7 +193,7 @@ async def monitor_data():
             print(f"An error occurred: {e}")
             await asyncio.sleep(check_interval)
 
-async def get_anomalies(counter: str):
+async def get_counter_value(counter: str):
     """Fetch the next 20 new anomalies for a specific counter."""
     global last_sent_id
 
@@ -257,7 +257,7 @@ async def websocket_endpoint(websocket: WebSocket, counter:str):
     await websocket.accept()
     
     while True:
-        data = await get_anomalies(counter)
+        data = await get_counter_value(counter)
         
         if not data:  # Stop when no more new records
             print("All data sent. Closing WebSocket.")
@@ -274,7 +274,7 @@ async def websocket_endpoint(websocket: WebSocket, counter:str):
 
 # endpoint for fetching individual counter detail
 @router.get("/{counter}/all", dependencies=[Depends(oauth2_scheme)])
-async def get_counter_values(counter:str):
+async def get_each_counter_values(counter:str):
     cursor = info_collection.find({}, {"_id": 0, f"Counters.{counter}":1, "Time": 1})
 
     counter_values = []
