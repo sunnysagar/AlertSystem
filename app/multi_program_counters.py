@@ -28,7 +28,7 @@ from pymongo import MongoClient
 # OpenPLC Configuration
 PLC_IP = "192.168.1.181"
 PLC_PORT = 502  # Single Modbus device, one port
-REGISTER_ADDRESSES = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]  # Adjust if needed
+REGISTER_ADDRESSES = list(range(0, 76))
 
 # # ArcticDB Configuration
 # MONGO_URI = "mongodb://localhost:27017/"
@@ -55,32 +55,14 @@ while True:
         print("Error reading from PLC!")
         continue
 
-    # Extract values
-    counter_value1 = result.registers[0]
-    counter_value2 = result.registers[1]
-    counter_value3 = result.registers[2]
-    counter_value4 = result.registers[3]
-    counter_value5 = result.registers[4]
-    counter_value6 = result.registers[5]
-    counter_value7 = result.registers[6]
-    counter_value8 = result.registers[7]
-    counter_value9 = result.registers[8]
-    counter_value10 = result.registers[9]
+    # Extract values dynamically for 75 registers
+    counter_values = {f"counter_value{i+1}": result.registers[i] for i in range(75)}
     timestamp = datetime.now()
 
-    # Prepare DataFrame
+    # Prepare DataFrame dynamically for all 75 counter values
     df = pd.DataFrame({
-        "timestamp": [timestamp], 
-        "counter_value1": [counter_value1],
-        "counter_value2": [counter_value2],
-        "counter_value3": [counter_value3],
-        "counter_value4": [counter_value4],
-        "counter_value5": [counter_value5],
-        "counter_value6": [counter_value6],
-        "counter_value7": [counter_value7],
-        "counter_value8": [counter_value8],
-        "counter_value9": [counter_value9],
-        "counter_value10": [counter_value10]
+        "timestamp": [timestamp],
+        **{f"counter_value{i+1}": [counter_values[f"counter_value{i+1}"]] for i in range(75)}
     })
 
     # Append data to ArcticDB
@@ -90,7 +72,7 @@ while True:
 
     library.write("counter_data10", df)
 
-    print(f"Saved: {timestamp} - {counter_value1}, {counter_value2}, {counter_value3}, {counter_value4}, {counter_value5}, {counter_value6}, {counter_value7}, {counter_value8}, {counter_value9},{counter_value10} ")
+    print(f"Saved: {timestamp} - {counter_values}")
     time.sleep(0.01)  # Read every 1  milli second
 # # Print the counter_data10 table
 # if "counter_data10" in library.list_symbols():
