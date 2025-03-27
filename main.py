@@ -21,7 +21,7 @@ from app.routes import auth, users
 from fastapi.middleware.cors import CORSMiddleware
 from app.auth.auth import oauth2_scheme, get_current_user
 from app.database import plc_collection, original_collection
-from app.services.anomalies_process import websocket_endpoint, monitor_data, get_anomalies
+from app.services.anomalies_process import websocket_endpoint, monitor_data, get_anomalies, router, websocket_counter_updates
 from datetime import datetime
 import asyncio
 import time
@@ -36,6 +36,7 @@ app = FastAPI(title="Alert System Web App")
 process=None
 app.include_router(auth.router, prefix="/auth", tags=["Authentication"])
 app.include_router(users.router, prefix="/users", tags=["users"])
+app.include_router(router, prefix="/infodb", tags=['infodb'])
 
 origins = [
     "http://localhost",
@@ -58,6 +59,7 @@ client.connect()
 # Flag for PLC task
 running = False
 plc_thread = None
+first_run = True # Flag to delete the existing data from the plc and originalDb
 
 # counter to track inserts
 record_count = 0
@@ -74,9 +76,15 @@ async def insert_many_plc_records_async(records):
 
 async def read_plc_task():
     """ Continuously read PLC data and store it in MongoDB when running = True """
-    global running, record_count, batch_data
+    global running, record_count, batch_data, first_run
     while True:
+        
         if running:
+            if first_run:
+                plc_collection.delete_many({})
+                original_collection.delete_many({})
+                first_run = False
+
             result = client.read_holding_registers(REGISTER_ADDRESSES[0], count=len(REGISTER_ADDRESSES))
             if result.isError():
                 print("Error reading from PLC")
@@ -84,11 +92,15 @@ async def read_plc_task():
                 continue
 
             counter_values = result.registers
-            timestamp = datetime.now()
+            timestamp = datetime.utcnow()
+
+
+            # Format as "DD.MM.YYYY HH:MM:SS.ssssss"
+            formatted_time = timestamp.strftime("%d.%m.%Y %H:%M:%S.%f")
 
             # Store data in MongoDB
             plc_record = {
-                "timestamp": timestamp,
+                "Time": formatted_time,
                 **{f"counter_value{i+1}": counter_values[i] for i in range(len(counter_values))}
             }
 
@@ -100,10 +112,14 @@ async def read_plc_task():
             batch_data.append(plc_record)
             record_count += 1
 
+            print(record_count)
+
+
+
             # When 100 records are inserted, store in the original database
-            if record_count == 100:
+            if record_count == 20:
                 original_collection.insert_many(batch_data)  # Bulk insert
-                # print(f"Moved {record_count} records to the archive database.")
+                print(f"Moved {record_count} records to the archive database.")
                 
                 record_count = 0
                 batch_data = []
@@ -157,9 +173,13 @@ async def get_latest_data():
     return {"message": "No data found"}
 
 # anomalies process endpoints
-@app.websocket("/ws")
-async def websocket_route(websocket: WebSocket):
-    await websocket_endpoint(websocket)
+@app.websocket("/ws/{counter}/value")
+async def websocket_route(websocket: WebSocket, counter:str):
+    await websocket_endpoint(websocket, counter)
+
+@app.websocket("/ws/{counter}")
+async def websocket_route_counter(websocket: WebSocket, counter: str):
+    await websocket_counter_updates(websocket, counter)
 
 @app.on_event("startup")
 async def startup_event():
