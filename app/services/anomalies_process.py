@@ -1,6 +1,7 @@
 from fastapi import FastAPI, WebSocket, BackgroundTasks
 import random
 import asyncio
+from starlette.websockets import WebSocketDisconnect
 import smtplib
 import pandas as pd
 from email.mime.multipart import MIMEMultipart
@@ -22,6 +23,7 @@ check_interval = 2 # seconds
 last_processed_id = None  # To track the last processed `_id`
 last_sent_id = None  # Keep track of last sent _id
 first_run = True   # flag to check to delete data in info data
+fetch_count = 0
 
 async def fetch_latest_data():
     """Fetch new data from the database asynchronously."""
@@ -83,11 +85,14 @@ async def fetch_latest_data():
 
 async def detect_anomalies():
     """Detect anomalies in the data and insert records into 'info_collection' with counters as subdocuments."""
-    global first_run
+    global first_run, fetch_count
 
     if first_run:
         await info_collection.delete_many({})  # Clear previous records only once
         first_run = False
+
+    fetch_count += 1  # Increment fetch count each time function is called
+    status = 1 if fetch_count % 2 == 0 else 0  # Determine status based on fetch count
 
     print("Starting anomaly detection...")
 
@@ -103,11 +108,10 @@ async def detect_anomalies():
     # Identify counter columns dynamically
     counter_columns = [col for col in df.columns if col.startswith("counter_value")]
 
-    counterName = str(counter_columns)
-
     print(f"Detected counters: {counter_columns}")  # Debug: Ensure correct column names
 
     records = []
+    
     for index, row in df.iterrows():
         counters_data = {}
 
@@ -128,7 +132,7 @@ async def detect_anomalies():
                 # Ensure key is string & assign values correctly
                 counters_data[str(counter)] = {
                     str(counter): counter_value,
-                    "Status": 1 if counter_value % 2 == 0 else 0  # Example anomaly rule
+                    "Status": status
                 }
 
             # Ensure 'Counters' is a dictionary and not a list
@@ -180,7 +184,6 @@ def send_email_alert():
         print(f"Failed to send email: {e}")
 
 
-
 async def monitor_data():
     """Continuously monitor data and trigger anomaly detection."""
     while True:
@@ -202,7 +205,7 @@ async def get_counter_value(counter: str):
         query = {"_id": {"$gt": last_sent_id}}  # Fetch older records
 
     # Fetch the next 20 records sorted by `_id` descending
-    cursor = info_collection.find(query, {"_id": 1, "Time": 1, f"Counters.{counter}": 1}).sort("_id", -1).limit(20)
+    cursor = info_collection.find(query, {"_id": 1, "Time": 1, f"Counters.{counter}": 1}).sort("_id", 1).limit(20)
     records = await cursor.to_list(length=20)
 
     if not records:
@@ -226,49 +229,37 @@ async def get_counter_value(counter: str):
     return {f"{counter}_list": jsonable_encoder(counter_values)}  # JSON serializable response
 
 
-async def websocket_counter_updates(websocket: WebSocket, counter: str):
-    """WebSocket connection that periodically calls the existing API and sends counter data."""
+async def websocket_endpoint(websocket: WebSocket, counter: str):
+    """Handles WebSocket connections and ensures resilience to disconnections and idle states."""
     await websocket.accept()
+    print(f"[WebSocket] Client connected: {counter}")
 
-       # Receive token from frontend on first message
-    token = await websocket.receive_text()
+    no_data_count = 0  # Counter for idle connection
 
-    api_url = f"http://127.0.01:8000/infodb/{counter}/all"  # API endpoint
+    try:
+        while True:
+            data = await get_counter_value(counter)
 
-    while True:
-        try:
-            async with httpx.AsyncClient() as client:
-                response = await client.get(api_url, headers={"Authorization": f"Bearer {token}"})
-                if response.status_code == 200:
-                    data = response.json().get(f"{counter}_list", [])[:20]  # Get first 20 records
-                    await websocket.send_json({f"{counter}_list": data})
-                else:
-                    await websocket.send_json({"error": "Unauthorized or failed to fetch data"})
+            if data[f"{counter}_list"]:  # If new data is found, reset no_data_count
+                no_data_count = 0
+                await websocket.send_json(data)
+            else:
+                no_data_count += 1
+                print(f"[WebSocket] No new data for {counter}. Attempt {no_data_count}")
 
-        except Exception as e:
-            print(f"WebSocket Error: {e}")
-            await websocket.send_json({"error": "Internal Server Error"})
+            if no_data_count >= 12:  # If no data for 12 cycles (1 minute), close connection
+                print(f"[WebSocket] Closing connection for {counter} due to inactivity")
+                await websocket.close()
+                break
 
-        await asyncio.sleep(2)  # Fetch new data every 2 seconds
+            await asyncio.sleep(5)  # Fetch new data every 5 seconds
 
-
-async def websocket_endpoint(websocket: WebSocket, counter:str):
-    """WebSocket connection for real-time anomaly updates."""
-    await websocket.accept()
-    
-    while True:
-        data = await get_counter_value(counter)
-        
-        if not data:  # Stop when no more new records
-            print("All data sent. Closing WebSocket.")
-            await asyncio.sleep(4)  # Wait and check again instead of closing
-            continue
-
-        await websocket.send_json(data)
-        await asyncio.sleep(2)  # Wait before fetching the next batch
-    
-    await websocket.close()
-
+    except WebSocketDisconnect:
+        print(f"[WebSocket] Client disconnected: {counter}")
+    except Exception as e:
+        print(f"[WebSocket] Error: {e}")
+    finally:
+        await websocket.close()
    
 
 
