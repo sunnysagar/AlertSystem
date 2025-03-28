@@ -21,7 +21,7 @@ from app.routes import auth, users
 from fastapi.middleware.cors import CORSMiddleware
 from app.auth.auth import oauth2_scheme, get_current_user
 from app.database import plc_collection, original_collection
-from app.services.anomalies_process import websocket_endpoint, monitor_data, get_anomalies, router, websocket_counter_updates
+from app.services.anomalies_process import websocket_endpoint, monitor_data, router, websocket_counter_updates
 from datetime import datetime
 import asyncio
 import time
@@ -187,9 +187,9 @@ async def startup_event():
     print("Monitor is started")
 
 
-@app.get("/info/fetch-anomalies", dependencies=[Depends(oauth2_scheme)])
-async def fetch_anomalies():
-    return await get_anomalies()
+# @app.get("/info/fetch-anomalies", dependencies=[Depends(oauth2_scheme)])
+# async def fetch_anomalies():
+#     return await get_anomalies()
 
 app.add_middleware(
     CORSMiddleware,
