@@ -24,9 +24,12 @@ from datetime import datetime
 from pymodbus.client import ModbusTcpClient
 from database import plc_collection 
 from pymongo import MongoClient
+from dotenv import load_dotenv
+import os
 
 # OpenPLC Configuration
-PLC_IP = "192.168.1.181"
+load_dotenv()
+PLC_IP = os.getenv("PLC_IP")
 PLC_PORT = 502  # Single Modbus device, one port
 REGISTER_ADDRESSES = list(range(0, 76))
 
