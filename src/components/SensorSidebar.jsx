@@ -3,6 +3,7 @@ import React, { createContext, useContext, useEffect, useMemo, useState } from "
 import { useAuth } from "../context/AuthContext";
 import "../styles/SensorSidebar.css"
 import { SensorContext } from "../context/SensorContext";
+import sensorIcon from "../assets/sensor.png";
 
 
 
@@ -10,6 +11,7 @@ const SensorSidebar = () => {
     const [sensor, setSensor] = useState([]);
      const {token} = useAuth();
      const {sensorName, setSensorName} = useContext(SensorContext);
+     const [clicked, setClicked] = useState(false);
 
     const fetchSensors = async () => {
         
@@ -33,6 +35,11 @@ const SensorSidebar = () => {
         fetchSensors();
     }, []);
 
+    const handleClicked = (sName) =>{
+        setSensorName(sName);
+        setClicked(!clicked)
+    }
+
 
     return (
         <div className="sensor-sidebar">
@@ -40,18 +47,21 @@ const SensorSidebar = () => {
             <ul>
                 {sensor.length > 0 ? (
                     sensor.map((sensorItem, index) => (
-                        <li key={index} onClick={() => setSensorName(sensorItem)}>{sensorItem || "Unnamed Sensor"}</li>
+                        <li 
+                            key={index} 
+                            onClick={() => handleClicked(sensorItem)} 
+                            className={clicked && sensorName === sensorItem ? 'on-selected' : ''}
+                        >
+                            <img src={sensorIcon} alt="sensorIcon" />
+                            {sensorItem || "Unnamed Sensor"}
+                        </li>
                     ))
                 ) : (
                     <li>No sensors found</li>
                 )}
-
             </ul>
             {/* <p>{sensorName}</p> */}
-        
         </div>
-
-        
     );
 };
 

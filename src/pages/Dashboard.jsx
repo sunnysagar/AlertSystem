@@ -11,7 +11,7 @@ const Dashboard = () => {
   const maxPoints = 60; // Number of points shown on graph
 
   const [isRunning, setIsRunning] = useState(true);
-  const [speed, setSpeed] = useState(800);
+  const [speed, setSpeed] = useState(500);
 
   const counterData = useCounterWebSocket(sensorName);
 
@@ -31,9 +31,9 @@ const Dashboard = () => {
 
       // Sliding window effect: Keep only the last `maxPoints` entries
       return updatedData.slice(-maxPoints);
-    });
+    }, speed);
 
-  }, [counterData, sensorName, isRunning]);
+  }, [counterData, sensorName, isRunning, speed]);
 
   return (
     <div className="dashboard-container">
