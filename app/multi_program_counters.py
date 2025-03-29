@@ -31,7 +31,8 @@ import os
 load_dotenv()
 PLC_IP = os.getenv("PLC_IP")
 PLC_PORT = 502  # Single Modbus device, one port
-REGISTER_ADDRESSES = list(range(0, 76))
+# REGISTER_ADDRESSES = list(range(0, 76))
+REGISTER_ADDRESSES = list(range(0, 3))
 
 # # ArcticDB Configuration
 # MONGO_URI = "mongodb://localhost:27017/"
@@ -59,13 +60,13 @@ while True:
         continue
 
     # Extract values dynamically for 75 registers
-    counter_values = {f"counter_value{i+1}": result.registers[i] for i in range(75)}
+    counter_values = {f"counter_value{i+1}": result.registers[i] for i in range(3)}
     timestamp = datetime.now()
 
     # Prepare DataFrame dynamically for all 75 counter values
     df = pd.DataFrame({
         "timestamp": [timestamp],
-        **{f"counter_value{i+1}": [counter_values[f"counter_value{i+1}"]] for i in range(75)}
+        **{f"counter_value{i+1}": [counter_values[f"counter_value{i+1}"]] for i in range(3)}
     })
 
     # Append data to ArcticDB

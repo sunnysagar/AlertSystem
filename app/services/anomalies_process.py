@@ -16,14 +16,15 @@ import httpx
 router = APIRouter()
 
 # Constants
-Window_Size = 20
-check_interval = 2 # seconds
+Window_Size = 25
+check_interval = 0.2 # seconds
 
 # Window_Size = 500  # Adjust as needed
 last_processed_id = None  # To track the last processed `_id`
 last_sent_id = None  # Keep track of last sent _id
 first_run = True   # flag to check to delete data in info data
 fetch_count = 0
+status = 0
 
 async def fetch_latest_data():
     """Fetch new data from the database asynchronously."""
@@ -87,17 +88,21 @@ async def detect_anomalies():
     """Detect anomalies in the data and insert records into 'info_collection' with counters as subdocuments."""
     global first_run, fetch_count
 
+
     if first_run:
         await info_collection.delete_many({})  # Clear previous records only once
         first_run = False
 
-    fetch_count += 1  # Increment fetch count each time function is called
-    status = 1 if fetch_count % 2 == 0 else 0  # Determine status based on fetch count
-
+    
     print("Starting anomaly detection...")
 
     # Fetch only new data
     data = await fetch_latest_data()
+    if data:
+        fetch_count += 1  # Increment fetch count each time function is called
+        print("fetch_count:", fetch_count)
+        status = 1 if fetch_count % 2 == 0 else 0  # Determine status based on fetch count
+
     if not data:
         print("No new data to process.")
         return
@@ -205,8 +210,8 @@ async def get_counter_value(counter: str):
         query = {"_id": {"$gt": last_sent_id}}  # Fetch older records
 
     # Fetch the next 20 records sorted by `_id` descending
-    cursor = info_collection.find(query, {"_id": 1, "Time": 1, f"Counters.{counter}": 1}).sort("_id", 1).limit(20)
-    records = await cursor.to_list(length=20)
+    cursor = info_collection.find(query, {"_id": 1, "Time": 1, f"Counters.{counter}": 1}).sort("_id", 1).limit(25)
+    records = await cursor.to_list(length=25)
 
     if not records:
         return {f"{counter}_list": []}  # No new records found

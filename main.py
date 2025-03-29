@@ -106,7 +106,7 @@ async def read_plc_task():
 
             # Store in the primary database
             plc_collection.insert_one(plc_record)
-            print(f"Stored PLC Data at {timestamp}")
+            # print(f"Stored PLC Data at {timestamp}")
 
             # Add to batch list
             batch_data.append(plc_record)
@@ -117,9 +117,9 @@ async def read_plc_task():
 
 
             # When 100 records are inserted, store in the original database
-            if record_count == 20:
+            if record_count == 25:
                 original_collection.insert_many(batch_data)  # Bulk insert
-                print(f"Moved {record_count} records to the archive database.")
+                print(f"Moved {record_count} records to the originalDB.")
                 
                 record_count = 0
                 batch_data = []
@@ -127,8 +127,7 @@ async def read_plc_task():
         else:
             print("PLC monitoring paused...")
 
-        await asyncio.sleep(1)  # Prevent CPU overuse
-
+        await asyncio.sleep(0.1)  # Prevent CPU overuse   100 data per second
 @app.post("/start_plc", dependencies=[Depends(oauth2_scheme)])
 def start_plc(background_tasks: BackgroundTasks):
     """ Start PLC data collection in the background """
@@ -177,10 +176,10 @@ async def get_latest_data():
 async def websocket_route(websocket: WebSocket, counter:str):
     await websocket_endpoint(websocket, counter)
 
-# @app.on_event("startup")
-# async def startup_event():
-#     asyncio.create_task(monitor_data())  # Start monitoring unconditionally
-#     print("Monitor is started")
+@app.on_event("startup")
+async def startup_event():
+    asyncio.create_task(monitor_data())  # Start monitoring unconditionally
+    print("Monitor is started")
 
 
 # @app.get("/info/fetch-anomalies", dependencies=[Depends(oauth2_scheme)])
