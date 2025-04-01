@@ -8,6 +8,8 @@ import PLCControl from './PLC/plc_read'
 // import Dashboardr from './pages/Dashboardr'
 import ForgotPassword from "./pages/ForgotPassword";
 import Dashboard from './pages/Dashboard'
+import UserProfile from "./pages/UserProfile";
+import Feedback from "./pages/Feedback";
 import { SensorProvider } from './context/SensorContext'
 
 
@@ -26,6 +28,8 @@ function App() {
           <Route path='/plc' element={<PLCControl />} />
           <Route path='/dashboard' element={<Dashboard />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/profile" element={<UserProfile />} />
+          <Route path="/feedback" element={<Feedback />} />
         </Routes>
         </SensorProvider>
       </AuthProvider>

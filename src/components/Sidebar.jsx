@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../styles/Sidebar.css";
 import { useLocation } from "react-router-dom";
@@ -18,6 +19,7 @@ export default function Sidebar() {
     const {token, logout} = useAuth();
     const  location = useLocation();
     const [userInfo, setUserInfo] = useState(null);
+    const navigate = useNavigate();
 
     const handleLogout = () => {
         logout();
@@ -69,6 +71,11 @@ export default function Sidebar() {
 
     const handleTabClick = (tab) => {
         setIsActive(tab);
+        if (tab === "Profile") {
+            navigate("/profile"); // Navigate to the UserProfile page
+          } else if (tab === "Feedback") {
+            navigate("/feedback"); // Navigate to the Feedback page
+          }
     }
 
     return (
@@ -90,20 +97,17 @@ export default function Sidebar() {
                     <li className={isActive === "Settings" ? "active" : ""} onClick={() => handleTabClick("Settings")}>
                     <img src={settings} alt="home"  className="icon-tab"/>Settings
                     </li>
-                   
                 </ul>
             </div>
             <div className="sidebar-footer">
-
                 <ul>
                     <li className={isActive === "Profile" ? "active" : "pro"} onClick={() => handleTabClick("Profile")} id="profile">
-                        <img src={profile} alt="" />
+                        <img src={profile} alt="User Profile" />
                     </li>
                     <li onClick={handleLogout} id="logout">
                         <img src={logout_icon} alt="logout" /> Logout
                     </li>
                 </ul>
-               
         </div>
         </div>
     );
