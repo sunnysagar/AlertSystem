@@ -6,6 +6,13 @@ export const useCounterWebSocket = (counter) => {
     const reconnectTimeout = useRef(null);
 
     useEffect(() => {
+        if(!counter){
+            console.log("websocketCounter: ", counter);
+            return;
+        } 
+
+        console.log("RwebsocketCounter: ", counter);
+    
         let isMounted = true;
 
         const connectWebSocket = () => {

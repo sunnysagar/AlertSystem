@@ -1,3 +1,11 @@
+/**
+ * SensorSidebar Component
+ * 
+ * This component displays a sidebar containing a list of detected sensors. 
+ * Users can select a sensor from the list, and the selected sensor's name 
+ * is stored in the context for use in other parts of the application.
+ * 
+ */
 import axios from "axios";
 import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { useAuth } from "../context/AuthContext";
@@ -5,12 +13,10 @@ import "../styles/SensorSidebar.css"
 import { SensorContext } from "../context/SensorContext";
 import sensorIcon from "../assets/sensor.png";
 
-
-
-const SensorSidebar = () => {
+const SensorSidebar = ({onSensorClick}) => {
     const [sensor, setSensor] = useState([]);
      const {token} = useAuth();
-     const {sensorName, setSensorName} = useContext(SensorContext);
+     const [sensorName, setSensorName] = useState('');
      const [clicked, setClicked] = useState(false);
 
     const fetchSensors = async () => {
@@ -37,30 +43,51 @@ const SensorSidebar = () => {
 
     const handleClicked = (sName) =>{
         setSensorName(sName);
-        setClicked(!clicked)
+        setClicked(!clicked);
+        // onSensorClick(sName)
+    }
+
+    const handlePlotClick = () => {
+        onSensorClick(sensorName);
+    }
+
+    const handleRefresh = () =>{
+        fetchSensors();
+    }
+
+    const handleClearPlot = () => {
+        setSensorName('');
+        onSensorClick('');
     }
 
 
     return (
         <div className="sensor-sidebar">
-            <h3>Detected Sensors</h3>
-            <ul>
-                {sensor.length > 0 ? (
-                    sensor.map((sensorItem, index) => (
-                        <li 
-                            key={index} 
-                            onClick={() => handleClicked(sensorItem)} 
-                            className={clicked && sensorName === sensorItem ? 'on-selected' : ''}
-                        >
-                            <img src={sensorIcon} alt="sensorIcon" />
-                            {sensorItem || "Unnamed Sensor"}
-                        </li>
-                    ))
-                ) : (
-                    <li>No sensors found</li>
-                )}
-            </ul>
-            {/* <p>{sensorName}</p> */}
+            <div className="sensor-container">
+                <h3>Detected Sensors</h3>
+                <ul>
+                    {sensor.length > 0 ? (
+                        sensor.map((sensorItem, index) => (
+                            <li 
+                                key={index} 
+                                onClick={() => handleClicked(sensorItem)} 
+                                className={clicked && sensorName === sensorItem ? 'on-selected' : ''}
+                            >
+                                <img src={sensorIcon} alt="sensorIcon" />
+                                {sensorItem || "Unnamed Sensor"}
+                            </li>
+                        ))
+                    ) : (
+                        <li>No sensors found</li>
+                    )}
+                </ul>
+            </div>
+           
+           <div className="sensor-controllers">
+                <button className="plot-btn" onClick={handlePlotClick}>Show Plot</button>
+                <button className="refresh-btn" onClick={handleRefresh}>Refresh</button>
+                <button className="clear-plot" onClick={handleClearPlot}>Clear Plot</button>
+           </div>
         </div>
     );
 };
