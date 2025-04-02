@@ -10,7 +10,7 @@ from app.database import original_collection, info_collection
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.encoders import jsonable_encoder
 from bson import ObjectId
-from app.auth.auth import oauth2_scheme
+from app.auth.auth import oauth2_scheme, get_current_user
 import httpx
 
 router = APIRouter()
@@ -287,8 +287,9 @@ async def get_each_counter_values(counter:str):
     return {f"{counter}_list": counter_values}
 
 
-@router.get("/all/sensor", dependencies=[Depends(oauth2_scheme)])
-async def get_all_available_counters():
+@router.get("/all/sensor")
+async def get_all_available_counters(token: str = Depends(oauth2_scheme)):
+    user = await get_current_user(token)
     cursor = info_collection.find({}, {"_id": 1, "Counters": 1}).sort("_id", 1)  # Sort by creation order
     counter_keys = []
 

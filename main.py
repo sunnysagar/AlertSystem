@@ -22,7 +22,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.auth.auth import oauth2_scheme, get_current_user
 from app.database import plc_collection, original_collection
 from app.services.anomalies_process import websocket_endpoint, monitor_data, router
-from datetime import datetime
+from datetime import datetime, timezone
 import asyncio
 import time
 import threading
@@ -176,7 +176,7 @@ async def get_latest_data():
 async def websocket_route(websocket: WebSocket, counter:str):
     await websocket_endpoint(websocket, counter)
 
-@app.on_event("startup")
+# @app.on_event("startup")
 async def startup_event():
     asyncio.create_task(monitor_data())  # Start monitoring unconditionally
     print("Monitor is started")

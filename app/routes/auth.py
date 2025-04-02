@@ -8,7 +8,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from datetime import timedelta
 from app.JWT.security import verify_password, hash_password
-from app.JWT.jwtSecurity import create_access_token
+from app.JWT.jwtSecurity import create_access_token, ACCESS_TOKEN_EXPIRE_MINUTES
 from app.database import users_collection
 from app.models.userModel import User, UserLogin
 import pymongo
@@ -65,6 +65,6 @@ async def login(user_login: UserLogin):
     if not verify_password(user_login.password, user["password"]):
         raise HTTPException(status_code=400, detail="Invalid password")
 
-    access_token = create_access_token({"sub": user["email"]}, timedelta(minutes=30))
+    access_token = create_access_token({"email": user["email"]}, timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES))
     
     return {"access_token": access_token, "token_type": "bearer"}

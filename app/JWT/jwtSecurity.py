@@ -11,14 +11,16 @@ Constants:
     ACCESS_TOKEN_EXPIRE_MINUTES: int
         The default expiration time for the access token in minutes.
 """
-
+import os
 from datetime import datetime, timedelta, timezone
 from jose import JWTError, jwt
+from dotenv import load_dotenv
 
-SECRET_KEY = "eyJhbGciOiJIUzI1NiJ9.eyJSb2xlIjoiQWRtaW4iLCJJc3N1ZXIiOiJJc3N1ZXIiLCJVc2VybmFtZSI6IkphdmFJblVzZSIsImV4cCI6MTc0MjI4NzE5MiwiaWF0IjoxNzQyMjg3MTkyfQ.TA0n4X08kthLQtMEuRiW9rcO9aHnGaqZFjoxvc-HrDE"
+load_dotenv()
+SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = "HS256"
 
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+ACCESS_TOKEN_EXPIRE_MINUTES = 1440  # 24 hours (1440 minutes)
 
 def create_access_token(data: dict, expires_delta: timedelta = None):
     """
@@ -36,6 +38,6 @@ def create_access_token(data: dict, expires_delta: timedelta = None):
         expire = datetime.now(timezone.utc) + expires_delta
     else:
         expire = datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    
+     
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
