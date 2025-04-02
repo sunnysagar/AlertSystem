@@ -4,11 +4,9 @@ import Homepage from './pages/Homepage'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import PLCControl from './PLC/plc_read'
-import ForgotPassword from "./pages/ForgotPassword";
 import Dashboard from './pages/Dashboard'
 // import Dashboardr from './pages/Dashboardr'
 import ForgotPassword from "./pages/ForgotPassword";
-import Dashboard from './pages/Dashboard'
 import UserProfile from "./pages/UserProfile";
 import Feedback from "./pages/Feedback";
 import { SensorProvider } from './context/SensorContext'

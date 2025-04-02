@@ -35,8 +35,8 @@ const Feedback = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        "http://127.0.0.1:8000/feedbacks",
+      await axios.post(
+        "http://127.0.0.1:8000/api/feedbacks", // Ensure this matches your backend route
         { feedback },
         {
           headers: {
@@ -48,8 +48,13 @@ const Feedback = () => {
       setFeedback(""); // Clear the feedback box
       setShowFeedbacks(false); // Refresh feedbacks after submission
     } catch (error) {
-      console.error("Error submitting feedback:", error);
-      setError("Failed to submit feedback.");
+      if (error.response) {
+        console.error("Error submitting feedback:", error.response.data);
+        setError(`Failed to submit feedback: ${error.response.data.message || "Unknown error"}`);
+      } else {
+        console.error("Error submitting feedback:", error.message);
+        setError("Failed to submit feedback.");
+      }
     }
   };
 
