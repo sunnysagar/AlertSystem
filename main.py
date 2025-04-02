@@ -129,7 +129,7 @@ async def read_plc_task():
         else:
             print("PLC monitoring paused...")
 
-        await asyncio.sleep(0.1)  # Prevent CPU overuse   100 data per second
+        await asyncio.sleep(0.1)  # Prevent CPU overuse   10 data per second
 @app.post("/start_plc", dependencies=[Depends(oauth2_scheme)])
 def start_plc(background_tasks: BackgroundTasks):
     """ Start PLC data collection in the background """
