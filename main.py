@@ -37,6 +37,7 @@ process=None
 app.include_router(auth.router, prefix="/auth", tags=["Authentication"])
 app.include_router(users.router, prefix="/users", tags=["users"])
 app.include_router(router, prefix="/infodb", tags=['infodb'])
+app.include_router(router, prefix="/feedback", tags=['feedback'])
 
 origins = [
     "http://localhost",
@@ -48,9 +49,10 @@ origins = [
 ]
 
 # OpenPLC Configuration
-PLC_IP = "192.168.1.181"
+PLC_IP = "192.168.44.76"
+# PLC_IP = "192.168.138.170"
 PLC_PORT = 502
-REGISTER_ADDRESSES = list(range(3))  # Registers 0-3
+REGISTER_ADDRESSES = list(range(10))  # Registers 0-10
 
 # Modbus Client
 client = ModbusTcpClient(PLC_IP, port=PLC_PORT)
