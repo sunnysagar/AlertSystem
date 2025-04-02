@@ -10,7 +10,6 @@ import axios from "axios";
 import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import "../styles/SensorSidebar.css"
-import { SensorContext } from "../context/SensorContext";
 import sensorIcon from "../assets/sensor.png";
 
 const SensorSidebar = ({onSensorClick}) => {
@@ -20,6 +19,7 @@ const SensorSidebar = ({onSensorClick}) => {
      const [clicked, setClicked] = useState(false);
 
     const fetchSensors = async () => {
+        if(!token) return;
         
         try {
             const response = await axios.get("http://127.0.0.1:8000/infodb/all/sensor", {
@@ -39,7 +39,7 @@ const SensorSidebar = ({onSensorClick}) => {
 
     useEffect(() => {
         fetchSensors();
-    }, []);
+    }, [token]);
 
     const handleClicked = (sName) =>{
         setSensorName(sName);

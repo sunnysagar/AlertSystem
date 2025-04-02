@@ -23,3 +23,8 @@
     background-color:#043e2f;
     position: fixed;
   }
+
+  .homepage p{
+    margin-left: 50%;
+    margin-top: 80px;
+  }

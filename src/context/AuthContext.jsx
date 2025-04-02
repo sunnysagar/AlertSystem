@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 const AuthContext = createContext();
 
@@ -18,8 +19,29 @@ export const AuthProvider = ({ children }) => {
         const authToken = localStorage.getItem("access_token");
 
         if(authToken){
-            setToken(authToken);
-            setIsAuthenticated(true);  
+            try {
+                const decodeToken = jwtDecode(authToken);
+                const currentTime = Date.now()/1000;   // in seconds
+
+                if(decodeToken.exp > currentTime)
+                {
+                    setToken(authToken);
+                    setIsAuthenticated(true);  
+
+                     // Navigate to the previous path or a default authenticated page
+                    const savedPath = sessionStorage.getItem('currentPath') || '/';
+                    navigate(savedPath);
+                }
+                else{
+                    logout();  // token expired
+                }
+            } catch (error) {
+                console.error("Error decoding token:", error);
+                logout();
+            }
+           
+        }else {
+            navigate("/login");
         }
             
     }, []);
@@ -27,7 +49,9 @@ export const AuthProvider = ({ children }) => {
     // Login function
     const login = async(email, password) => {
         try{
-            const response = await axios.post("http://127.0.0.1:8000/auth/login", { email, password });
+            const response = await axios.post("http://127.0.0.1:8000/auth/login", { email, password },
+                { headers: { "Content-Type": "application/json" } }
+            );
             setToken(response.data.access_token);
             setIsAuthenticated(true);
             localStorage.setItem("access_token", response.data.access_token);
@@ -57,6 +81,7 @@ export const AuthProvider = ({ children }) => {
         setToken(null);
         setIsAuthenticated(false);
         localStorage.removeItem("access_token");
+        sessionStorage.removeItem("currentPath");
         navigate("/login");
     };
 
