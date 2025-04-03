@@ -17,18 +17,28 @@ const Dashboard = () => {
   useEffect(() => {
     if (!counterData || counterData.length === 0 || !isRunning) return;
 
-    const newData = counterData.map((item) => ({
-      Time: item.Time,
-      Data: item[sensorName] || 0,
-      Status: item.Status,
-      color: item.Status === 1 ? "red" : "green",
-    }));
+    const interval = setInterval(() => {
+      if (!counterData || counterData.length === 0) return;
 
-    setData((prevData) => [...prevData, ...newData].slice(-maxPoints), speed);
+      const newData = counterData.map((item) => ({
+        Time: item.Time,
+        Data: item[sensorName] || 0,
+        Status: item.Status,
+        color: item.Status === 1 ? "red" : "green",
+      }));
+
+      setData((prevData) => {
+        const updatedData = [...prevData, ...newData];
+        return updatedData.length > maxPoints ? updatedData.slice(-maxPoints) : updatedData;
+      });
+    }, speed);
+
+    return () => clearInterval(interval);
   }, [counterData, sensorName, isRunning, speed]);
 
   const handleSensorClicked = (selectedSensor) => {
     setSensorName(selectedSensor);
+    setData([]); // Reset data on new sensor selection
   };
 
   const toggleRunningState = () => {
@@ -72,6 +82,9 @@ const Dashboard = () => {
                     dataKey="Data"
                     stroke={data.length > 0 ? data[data.length - 1].color : "green"}
                     strokeWidth={3}
+                    // animationDuration={300}
+                    isAnimationActive={false}
+                   
                   />
                 </LineChart>
               </ResponsiveContainer>
